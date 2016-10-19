@@ -12,7 +12,7 @@ var FilterBox = React.createClass({
   setFilterValues: function(filterString) {
     if (filterString === "none") {
       this.setState({filterBy: "none", filterValues: null});
-      this.props.handleChange(this.props.characters);
+      // this.props.handleChange(this.props.characters);
       return;
     }
 

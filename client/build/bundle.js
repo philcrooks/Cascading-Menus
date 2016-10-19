@@ -49,10 +49,10 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 	
-	var CharacterBox = __webpack_require__(159);
+	var Container = __webpack_require__(169);
 	
 	window.onload = function () {
-	  ReactDOM.render(React.createElement(CharacterBox, { url: 'http://hp-api.herokuapp.com/api/characters' }), document.getElementById('app'));
+	  ReactDOM.render(React.createElement(Container, { url: 'http://hp-api.herokuapp.com/api/characters' }), document.getElementById('app'));
 	};
 
 /***/ },
@@ -19759,47 +19759,43 @@
 	
 	var CharacterSelector = __webpack_require__(160);
 	var CharacterDetail = __webpack_require__(161);
-	var FilterBox = __webpack_require__(166);
 	
 	var CharacterBox = React.createClass({
 	  displayName: 'CharacterBox',
 	
 	
 	  getInitialState: function getInitialState() {
-	    return { allCharacters: [], filteredCharacters: [], focusCharacter: 0 };
+	    return { focusCharacter: 0 };
 	  },
 	
-	  componentDidMount: function componentDidMount() {
-	    var request = new XMLHttpRequest();
-	    request.open('GET', this.props.url);
-	    request.onload = function () {
-	      var HPData = JSON.parse(request.responseText);
-	      this.setState({ allCharacters: HPData, filteredCharacters: HPData, focusCharacter: 0 });
-	      console.log("Data received from API");
-	    }.bind(this);
-	    request.send();
+	  valuesChanged: function valuesChanged(newCharacters) {
+	    if (!this.props.characters || !newCharacters || newCharacters.length !== this.props.characters.length) return true;
+	    for (var i = 0; i < newCharacters.length; i++) {
+	      if (newCharacters[i] !== this.props.characters[i]) return true;
+	    }
+	    return false;
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (this.valuesChanged(nextProps.characters)) this.setState({ focusCharacter: 0 });
 	  },
 	
 	  setFocusCharacter: function setFocusCharacter(index) {
 	    this.setState({ focusCharacter: index });
 	  },
 	
-	  filterCharacters: function filterCharacters(characterList) {
-	    this.setState({ filteredCharacters: characterList, focusCharacter: 0 });
-	  },
-	
 	  render: function render() {
+	    console.log("Rendering CharacterBox...");
+	
+	    var character = this.props.characters ? this.props.characters[this.state.focusCharacter] : null;
 	    return React.createElement(
 	      'div',
 	      { className: 'char-box' },
-	      React.createElement(FilterBox, {
-	        characters: this.state.allCharacters,
-	        handleChange: this.filterCharacters }),
 	      React.createElement(CharacterSelector, {
-	        characters: this.state.filteredCharacters,
+	        characters: this.props.characters,
 	        handleChange: this.setFocusCharacter }),
 	      React.createElement(CharacterDetail, {
-	        character: this.state.filteredCharacters[this.state.focusCharacter] })
+	        character: character })
 	    );
 	  }
 	});
@@ -19810,15 +19806,27 @@
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	var React = __webpack_require__(1);
 	
 	var CharacterSelector = React.createClass({
-	  displayName: 'CharacterSelector',
+	  displayName: "CharacterSelector",
 	
 	  getInitialState: function getInitialState() {
 	    return { selectedIndex: 0 };
+	  },
+	
+	  valuesChanged: function valuesChanged(newCharacters) {
+	    if (!this.props.characters || !newCharacters || newCharacters.length !== this.props.characters.length) return true;
+	    for (var i = 0; i < newCharacters.length; i++) {
+	      if (newCharacters[i] !== this.props.characters[i]) return true;
+	    }
+	    return false;
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (this.valuesChanged(nextProps.characters)) this.setState({ selectedIndex: 0 });
 	  },
 	
 	  handleChange: function handleChange(event) {
@@ -19831,21 +19839,34 @@
 	  render: function render() {
 	    console.log("Rendering CharacterSelector...");
 	    if (!this.props.characters) {
-	      return;
+	      return React.createElement(
+	        "div",
+	        { className: "char-selector" },
+	        React.createElement(
+	          "select",
+	          { id: "char-selector" },
+	          React.createElement(
+	            "option",
+	            null,
+	            "No characters available"
+	          )
+	        )
+	      );
 	    }
+	
 	    var options = this.props.characters.map(function (character, index) {
 	      return React.createElement(
-	        'option',
+	        "option",
 	        { value: index, key: index },
 	        character.name
 	      );
 	    });
 	    return React.createElement(
-	      'div',
-	      { className: 'char-selector' },
+	      "div",
+	      { className: "char-selector" },
 	      React.createElement(
-	        'select',
-	        { id: 'char-selector', value: this.state.selectedIndex, onChange: this.handleChange },
+	        "select",
+	        { id: "char-selector", value: this.state.selectedIndex, onChange: this.handleChange },
 	        options
 	      )
 	    );
@@ -20087,7 +20108,7 @@
 	  setFilterValues: function setFilterValues(filterString) {
 	    if (filterString === "none") {
 	      this.setState({ filterBy: "none", filterValues: null });
-	      this.props.handleChange(this.props.characters);
+	      // this.props.handleChange(this.props.characters);
 	      return;
 	    }
 	
@@ -20175,7 +20196,10 @@
 	  },
 	
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    if (this.valuesChanged(nextProps.values)) this.setState({ selectedIndex: 0 });
+	    if (this.valuesChanged(nextProps.values)) {
+	      this.setState({ selectedIndex: 0 });
+	      // this.props.handleChange(0);
+	    }
 	  },
 	
 	  handleChange: function handleChange(event) {
@@ -20287,6 +20311,55 @@
 	});
 	
 	module.exports = FilterList;
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var CharacterBox = __webpack_require__(159);
+	var FilterBox = __webpack_require__(166);
+	
+	var Container = React.createClass({
+	  displayName: 'Container',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { allCharacters: [], filteredCharacters: [] };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var request = new XMLHttpRequest();
+	    request.open('GET', this.props.url);
+	    request.onload = function () {
+	      var HPData = JSON.parse(request.responseText);
+	      this.setState({ allCharacters: HPData, filteredCharacters: HPData });
+	      console.log("Data received from API");
+	    }.bind(this);
+	    request.send();
+	  },
+	
+	  filterCharacters: function filterCharacters(characterList) {
+	    this.setState({ filteredCharacters: characterList });
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'char-box' },
+	      React.createElement(FilterBox, {
+	        characters: this.state.allCharacters,
+	        handleChange: this.filterCharacters }),
+	      React.createElement(CharacterBox, {
+	        characters: this.state.filteredCharacters })
+	    );
+	  }
+	});
+	
+	module.exports = Container;
 
 /***/ }
 /******/ ]);

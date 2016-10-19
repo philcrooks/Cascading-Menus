@@ -5,6 +5,19 @@ var CharacterSelector = React.createClass({
     return {selectedIndex: 0};
   },
 
+  valuesChanged: function(newCharacters) {
+    if (!this.props.characters || !newCharacters ||
+      (newCharacters.length !== this.props.characters.length)) return true;
+    for(var i = 0; i < newCharacters.length; i++) {
+      if(newCharacters[i] !== this.props.characters[i]) return true;
+    }
+    return false;
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    if (this.valuesChanged(nextProps.characters)) this.setState({selectedIndex: 0});
+  },
+
   handleChange: function(event) {
     event.preventDefault();
     var newIndex = event.target.value;
@@ -15,8 +28,15 @@ var CharacterSelector = React.createClass({
   render: function() {
     console.log("Rendering CharacterSelector...");
     if (!this.props.characters) {
-      return;
+      return(
+        <div className="char-selector">
+          <select id="char-selector">
+            <option>No characters available</option>
+          </select>
+        </div>
+      )
     }
+
     var options = this.props.characters.map(function(character, index){
       return <option value={index} key={index}>{character.name}</option>; 
     });

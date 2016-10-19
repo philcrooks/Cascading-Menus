@@ -16,7 +16,10 @@ var FilterChoice = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
-    if (this.valuesChanged(nextProps.values)) this.setState({selectedIndex: 0});
+    if (this.valuesChanged(nextProps.values)) {
+      this.setState({selectedIndex: 0});
+      // this.props.handleChange(0);
+    }
   },
 
   handleChange: function(event) {
