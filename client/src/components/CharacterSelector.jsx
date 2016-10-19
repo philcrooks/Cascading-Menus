@@ -22,13 +22,12 @@ var CharacterSelector = React.createClass({
     });
     return(
       <div className='char-selector'>
-      <select id="char-selector" value={this.state.selectedIndex} onChange={this.handleChange}>{options}
-      </select>
+        <select id="char-selector" value={this.state.selectedIndex} onChange={this.handleChange}>
+          {options}
+        </select>
       </div>
     )
-
   }
-
 })
 
 module.exports = CharacterSelector;

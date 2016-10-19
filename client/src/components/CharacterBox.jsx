@@ -1,9 +1,5 @@
 var React = require('react');
 
-var CharacterAncestry = require('./CharacterAncestry.jsx');
-var CharacterHouse = require('./CharacterHouse.jsx');
-var CharacterPatronus = require('./CharacterPatronus.jsx');
-var CharacterWand = require('./CharacterWand.jsx');
 var CharacterSelector = require('./CharacterSelector.jsx');
 var CharacterDetail = require('./CharacterDetail.jsx');
 
@@ -23,26 +19,23 @@ var CharacterBox = React.createClass({
       request.send();
     },
 
-    setFocusCharacter: function(index) {
-      this.setState({focusCharacter: index});
-    },
+  setFocusCharacter: function(index) {
+    this.setState({focusCharacter: index});
+  },
 
-    render: function() {
-      return (
-        <div className="char-box">
-          <CharacterSelector
-            characters={this.state.characters}
-            selectCharacter={this.setFocusCharacter}>
-          </CharacterSelector>
-          <CharacterDetail
-            character={this.state.characters[this.state.focusCharacter]}>
-          </CharacterDetail>
-        </div>
-        )
-    }
-
-
-
+  render: function() {
+    return (
+      <div className="char-box">
+        <CharacterSelector
+          characters={this.state.characters}
+          selectCharacter={this.setFocusCharacter}>
+        </CharacterSelector>
+        <CharacterDetail
+          character={this.state.characters[this.state.focusCharacter]}>
+        </CharacterDetail>
+      </div>
+    )
+  }
 });
 
 module.exports = CharacterBox;
