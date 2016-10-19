@@ -49,17 +49,10 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 	
-	var CharacterAncestry = __webpack_require__(159);
-	var CharacterHouse = __webpack_require__(160);
-	var CharacterPatronus = __webpack_require__(161);
-	var CharacterWand = __webpack_require__(162);
+	var CharacterBox = __webpack_require__(159);
 	
 	window.onload = function () {
-	  ReactDOM.render(React.createElement(
-	    'h2',
-	    null,
-	    'App Started'
-	  ), document.getElementById('app'));
+	  ReactDOM.render(React.createElement(CharacterBox, { url: 'http://hp-api.herokuapp.com/api/characters' }), document.getElementById('app'));
 	};
 
 /***/ },
@@ -19758,15 +19751,62 @@
 
 /***/ },
 /* 159 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var CharacterAncestry = __webpack_require__(160);
+	var CharacterHouse = __webpack_require__(161);
+	var CharacterPatronus = __webpack_require__(162);
+	var CharacterWand = __webpack_require__(163);
+	var CharacterSelector = __webpack_require__(164);
+	var Character = __webpack_require__(165);
+	
+	var CharacterBox = React.createClass({
+	  displayName: 'CharacterBox',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { characters: [], focusCharacter: 0 };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	
+	    var request = new XMLHttpRequest();
+	    request.open('GET', this.props.url);
+	    request.onload = function () {
+	      var HPData = JSON.parse(request.responseText);
+	      this.setState({ characters: HPData, focusCharacter: 0 });
+	    }.bind(this);
+	    request.send();
+	  },
+	
+	  setFocusCharacter: function setFocusCharacter(index) {
+	    console.log(index);
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(CharacterSelector, { characters: this.state.characters, selectCharacter: this.setFocusCharacter }),
+	      React.createElement(Character, { character: this.state.characters[this.state.focusCharacter] })
+	    );
+	  }
+	
+	});
+	
+	module.exports = CharacterBox;
 
 /***/ },
 /* 160 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+	
+	var React = __webpack_require__(1);
 
 /***/ },
 /* 161 */
@@ -19779,6 +19819,68 @@
 /***/ function(module, exports) {
 
 	"use strict";
+
+/***/ },
+/* 163 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var CharacterSelector = React.createClass({
+	  displayName: 'CharacterSelector',
+	
+	  getInitialState: function getInitialState() {
+	    return { selectedIndex: 0 };
+	  },
+	
+	  handleChange: function handleChange(event) {
+	    event.preventDefault();
+	    var newIndex = event.target.value;
+	    this.setState({ selectedIndex: newIndex });
+	    this.props.selectCharacter(newIndex);
+	  },
+	
+	  render: function render() {
+	    if (!this.props.characters) {
+	      return;
+	    }
+	    var options = this.props.characters.map(function (character, index) {
+	      return React.createElement(
+	        'option',
+	        { value: index, key: index },
+	        character.name
+	      );
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'char-selector' },
+	      React.createElement(
+	        'select',
+	        { id: 'char-selector', value: this.state.selectedIndex, onChange: this.handleChange },
+	        options
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = CharacterSelector;
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
 
 /***/ }
 /******/ ]);
