@@ -26,7 +26,7 @@ var CharacterBox = React.createClass({
   },
 
   filterCharacters: function(characterList) {
-    this.setState({filteredCharacters: characterList});
+    this.setState({filteredCharacters: characterList, focusCharacter: 0});
   },
 
   render: function() {

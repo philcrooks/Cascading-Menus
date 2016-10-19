@@ -2,7 +2,21 @@ var React = require('react');
 
 var FilterChoice = React.createClass({
   getInitialState: function() {
-    return({selectedIndex: 0})
+    return({selectedIndex: 0});
+  },
+
+  valuesChanged: function(newValues) {
+    if (!this.props.values || !newValues || (newValues.length !== this.props.values.length)) {
+      return true;
+    }
+    for(var i = 0; i < newValues.length; i++) {
+      if(newValues[i] !== this.props.values[i]) return true;
+    }
+    return false;
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    if (this.valuesChanged(nextProps.values)) this.setState({selectedIndex: 0});
   },
 
   handleChange: function(event) {

@@ -19785,7 +19785,7 @@
 	  },
 	
 	  filterCharacters: function filterCharacters(characterList) {
-	    this.setState({ filteredCharacters: characterList });
+	    this.setState({ filteredCharacters: characterList, focusCharacter: 0 });
 	  },
 	
 	  render: function render() {
@@ -20087,6 +20087,7 @@
 	  setFilterValues: function setFilterValues(filterString) {
 	    if (filterString === "none") {
 	      this.setState({ filterBy: "none", filterValues: null });
+	      this.props.handleChange(this.props.characters);
 	      return;
 	    }
 	
@@ -20121,7 +20122,7 @@
 	    }
 	
 	    this.setState({ filterBy: filterString, filterValues: filterValues });
-	    this.setCharacterChoice(0);
+	    // this.setCharacterChoice(0);
 	  },
 	
 	  setCharacterChoice: function setCharacterChoice(index) {
@@ -20161,6 +20162,20 @@
 	
 	  getInitialState: function getInitialState() {
 	    return { selectedIndex: 0 };
+	  },
+	
+	  valuesChanged: function valuesChanged(newValues) {
+	    if (!this.props.values || !newValues || newValues.length !== this.props.values.length) {
+	      return true;
+	    }
+	    for (var i = 0; i < newValues.length; i++) {
+	      if (newValues[i] !== this.props.values[i]) return true;
+	    }
+	    return false;
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (this.valuesChanged(nextProps.values)) this.setState({ selectedIndex: 0 });
 	  },
 	
 	  handleChange: function handleChange(event) {
@@ -20262,23 +20277,8 @@
 	        ),
 	        React.createElement(
 	          "option",
-	          { value: "alive" },
-	          "Living"
-	        ),
-	        React.createElement(
-	          "option",
 	          { value: "species" },
 	          "Species"
-	        ),
-	        React.createElement(
-	          "option",
-	          { value: "hogwartsStaff" },
-	          "Staff"
-	        ),
-	        React.createElement(
-	          "option",
-	          { value: "hogwartsStudent" },
-	          "Student"
 	        )
 	      )
 	    );

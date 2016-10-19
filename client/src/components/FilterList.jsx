@@ -22,10 +22,7 @@ var FilterList = React.createClass({
           <option value="ancestry">Ancestry</option>
           <option value="gender">Gender</option>
           <option value="house">House</option>
-          <option value="alive">Living</option>
           <option value="species">Species</option>
-          <option value="hogwartsStaff">Staff</option>
-          <option value="hogwartsStudent">Student</option>
         </select>
       </div>
     )

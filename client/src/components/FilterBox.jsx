@@ -12,6 +12,7 @@ var FilterBox = React.createClass({
   setFilterValues: function(filterString) {
     if (filterString === "none") {
       this.setState({filterBy: "none", filterValues: null});
+      this.props.handleChange(this.props.characters);
       return;
     }
 
@@ -24,7 +25,7 @@ var FilterBox = React.createClass({
       }
     }
     this.setState({filterBy: filterString, filterValues: filterValues});
-    this.setCharacterChoice(0);
+    // this.setCharacterChoice(0);
   },
 
   setCharacterChoice: function(index) {
