@@ -19759,13 +19759,14 @@
 	
 	var CharacterSelector = __webpack_require__(160);
 	var CharacterDetail = __webpack_require__(161);
+	var FilterBox = __webpack_require__(166);
 	
 	var CharacterBox = React.createClass({
 	  displayName: 'CharacterBox',
 	
 	
 	  getInitialState: function getInitialState() {
-	    return { characters: [], focusCharacter: 0 };
+	    return { allCharacters: [], filteredCharacters: [], focusCharacter: 0 };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
@@ -19773,7 +19774,8 @@
 	    request.open('GET', this.props.url);
 	    request.onload = function () {
 	      var HPData = JSON.parse(request.responseText);
-	      this.setState({ characters: HPData, focusCharacter: 0 });
+	      this.setState({ allCharacters: HPData, filteredCharacters: HPData, focusCharacter: 0 });
+	      console.log("Data received from API");
 	    }.bind(this);
 	    request.send();
 	  },
@@ -19782,15 +19784,22 @@
 	    this.setState({ focusCharacter: index });
 	  },
 	
+	  filterCharacters: function filterCharacters(characterList) {
+	    this.setState({ filteredCharacters: characterList });
+	  },
+	
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      { className: 'char-box' },
+	      React.createElement(FilterBox, {
+	        characters: this.state.allCharacters,
+	        handleChange: this.filterCharacters }),
 	      React.createElement(CharacterSelector, {
-	        characters: this.state.characters,
-	        selectCharacter: this.setFocusCharacter }),
+	        characters: this.state.filteredCharacters,
+	        handleChange: this.setFocusCharacter }),
 	      React.createElement(CharacterDetail, {
-	        character: this.state.characters[this.state.focusCharacter] })
+	        character: this.state.filteredCharacters[this.state.focusCharacter] })
 	    );
 	  }
 	});
@@ -19816,10 +19825,11 @@
 	    event.preventDefault();
 	    var newIndex = event.target.value;
 	    this.setState({ selectedIndex: newIndex });
-	    this.props.selectCharacter(newIndex);
+	    this.props.handleChange(newIndex);
 	  },
 	
 	  render: function render() {
+	    console.log("Rendering CharacterSelector...");
 	    if (!this.props.characters) {
 	      return;
 	    }
@@ -19861,6 +19871,7 @@
 	  displayName: 'CharacterDetail',
 	
 	  render: function render() {
+	    console.log("Rendering CharacterDetail...");
 	    var character = this.props.character;
 	    if (!character) {
 	      return React.createElement(
@@ -20053,6 +20064,229 @@
 	};
 	
 	module.exports = CharacterWand;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var FilterChoice = __webpack_require__(167);
+	var FilterList = __webpack_require__(168);
+	
+	var FilterBox = React.createClass({
+	  displayName: 'FilterBox',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { filterValues: null };
+	  },
+	
+	  setFilterValues: function setFilterValues(filterString) {
+	    if (filterString === "none") {
+	      this.setState({ filterBy: "none", filterValues: null });
+	      return;
+	    }
+	
+	    var filterValues = [];
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	      for (var _iterator = this.props.characters[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var character = _step.value;
+	
+	        var value = character[filterString];
+	        if (value) {
+	          var index = filterValues.indexOf(value);
+	          if (index < 0) filterValues.push(value);
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	
+	    this.setState({ filterBy: filterString, filterValues: filterValues });
+	    this.setCharacterChoice(0);
+	  },
+	
+	  setCharacterChoice: function setCharacterChoice(index) {
+	    var filterValue = this.state.filterValues[index];
+	    var characters = this.props.characters.filter(function (character) {
+	      return character[this.state.filterBy] === filterValue;
+	    }.bind(this));
+	    this.props.handleChange(characters);
+	  },
+	
+	  render: function render() {
+	    console.log("Rendering FilterBox...");
+	    return React.createElement(
+	      'div',
+	      { className: 'filter-box' },
+	      React.createElement(FilterList, {
+	        handleChange: this.setFilterValues }),
+	      React.createElement(FilterChoice, {
+	        values: this.state.filterValues,
+	        handleChange: this.setCharacterChoice })
+	    );
+	  }
+	});
+	
+	module.exports = FilterBox;
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var FilterChoice = React.createClass({
+	  displayName: "FilterChoice",
+	
+	  getInitialState: function getInitialState() {
+	    return { selectedIndex: 0 };
+	  },
+	
+	  handleChange: function handleChange(event) {
+	    event.preventDefault();
+	    var newIndex = event.target.value;
+	    this.setState({ selectedIndex: newIndex });
+	    this.props.handleChange(newIndex);
+	  },
+	
+	  render: function render() {
+	    console.log("Rendering FilterChoice...");
+	    if (!this.props.values) {
+	      return React.createElement(
+	        "div",
+	        { className: "filter-choice" },
+	        React.createElement(
+	          "select",
+	          { id: "filter-choice" },
+	          React.createElement(
+	            "option",
+	            null,
+	            "No filter selected"
+	          )
+	        )
+	      );
+	    }
+	
+	    var options = this.props.values.map(function (filterValue, index) {
+	      return React.createElement(
+	        "option",
+	        { value: index, key: index },
+	        filterValue
+	      );
+	    });
+	    return React.createElement(
+	      "div",
+	      { className: "filter-choice" },
+	      React.createElement(
+	        "select",
+	        { id: "filter-choice", value: this.state.selectedIndex, onChange: this.handleChange },
+	        options
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = FilterChoice;
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var FilterList = React.createClass({
+	  displayName: "FilterList",
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { selectedValue: "none" };
+	  },
+	
+	  handleChange: function handleChange(event) {
+	    event.preventDefault();
+	    var newValue = event.target.value;
+	    this.setState({ selectedValue: newValue });
+	    this.props.handleChange(newValue);
+	  },
+	
+	  render: function render() {
+	    console.log("Rendering FilterList...");
+	    return React.createElement(
+	      "div",
+	      { className: "filter-list" },
+	      React.createElement(
+	        "select",
+	        { id: "filter-list", value: this.state.selectedValue, onChange: this.handleChange },
+	        React.createElement(
+	          "option",
+	          { value: "none" },
+	          "No filter"
+	        ),
+	        React.createElement(
+	          "option",
+	          { value: "ancestry" },
+	          "Ancestry"
+	        ),
+	        React.createElement(
+	          "option",
+	          { value: "gender" },
+	          "Gender"
+	        ),
+	        React.createElement(
+	          "option",
+	          { value: "house" },
+	          "House"
+	        ),
+	        React.createElement(
+	          "option",
+	          { value: "alive" },
+	          "Living"
+	        ),
+	        React.createElement(
+	          "option",
+	          { value: "species" },
+	          "Species"
+	        ),
+	        React.createElement(
+	          "option",
+	          { value: "hogwartsStaff" },
+	          "Staff"
+	        ),
+	        React.createElement(
+	          "option",
+	          { value: "hogwartsStudent" },
+	          "Student"
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = FilterList;
 
 /***/ }
 /******/ ]);

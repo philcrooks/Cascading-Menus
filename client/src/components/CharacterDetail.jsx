@@ -7,6 +7,7 @@ var CharacterWand = require('./CharacterWand.jsx');
 
 var CharacterDetail = React.createClass({
   render: function() {
+    console.log("Rendering CharacterDetail...");
     var character = this.props.character;
     if (!character) {
       return(

@@ -6,30 +6,46 @@ var FilterList = require('./FilterList.jsx');
 var FilterBox = React.createClass({
 
   getInitialState: function() {
-    return({filterString: null, filteredChoice: null})
-  }
+    return({filterValues: null})
+  },
 
-  setFilterString: function(filterString) {
+  setFilterValues: function(filterString) {
+    if (filterString === "none") {
+      this.setState({filterBy: "none", filterValues: null});
+      return;
+    }
+
     var filterValues = [];
     for (var character of this.props.characters) {
       var value = character[filterString];
       if (value) {
-        var index = filerValues.indexOf(value);
+        var index = filterValues.indexOf(value);
         if (index < 0) filterValues.push(value);
       }
     }
-    this.setState({filterString: filterString, filterValues: filterValues});
+    this.setState({filterBy: filterString, filterValues: filterValues});
+    this.setCharacterChoice(0);
   },
 
   setCharacterChoice: function(index) {
-    this.setState({filteredChoice: filteredChoice});
+    var filterValue = this.state.filterValues[index];
+    var characters = this.props.characters.filter(function(character) {
+      return (character[this.state.filterBy] === filterValue)
+    }.bind(this))
+    this.props.handleChange(characters);
   },
 
   render: function() {
+    console.log("Rendering FilterBox...");
     return(
       <div className="filter-box">
-        <FilterList handleChange={this.setFilterString}></FilterList>
-        <FilterChoice characters={this.props.filtercharacters} handleChange={this.setCharacterChoice}</FilterChoice>
+        <FilterList
+          handleChange={this.setFilterValues}>
+        </FilterList>
+        <FilterChoice
+          values={this.state.filterValues}
+          handleChange={this.setCharacterChoice}>
+        </FilterChoice>
       </div>
     )
   }

@@ -3,17 +3,17 @@ var React = require('react');
 var CharacterSelector = React.createClass({
   getInitialState: function() {
     return {selectedIndex: 0};
-    
   },
 
   handleChange: function(event) {
     event.preventDefault();
     var newIndex = event.target.value;
     this.setState( { selectedIndex: newIndex } );
-    this.props.selectCharacter( newIndex );
+    this.props.handleChange( newIndex );
   },
 
   render: function() {
+    console.log("Rendering CharacterSelector...");
     if (!this.props.characters) {
       return;
     }

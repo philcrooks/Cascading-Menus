@@ -2,11 +2,12 @@ var React = require('react');
 
 var CharacterSelector = require('./CharacterSelector.jsx');
 var CharacterDetail = require('./CharacterDetail.jsx');
+var FilterBox = require('./FilterBox.jsx')
 
 var CharacterBox = React.createClass({
 
   getInitialState: function() {
-    return ({characters: [], focusCharacter: 0});
+    return ({allCharacters: [], filteredCharacters: [], focusCharacter: 0});
   },
 
   componentDidMount: function() {
@@ -14,7 +15,8 @@ var CharacterBox = React.createClass({
       request.open('GET', this.props.url);
       request.onload = function() {
         var HPData = JSON.parse(request.responseText);
-        this.setState({characters: HPData, focusCharacter: 0});
+        this.setState({allCharacters: HPData, filteredCharacters: HPData, focusCharacter: 0});
+        console.log("Data received from API");
       }.bind(this);
       request.send();
     },
@@ -23,15 +25,23 @@ var CharacterBox = React.createClass({
     this.setState({focusCharacter: index});
   },
 
+  filterCharacters: function(characterList) {
+    this.setState({filteredCharacters: characterList});
+  },
+
   render: function() {
     return (
       <div className="char-box">
+        <FilterBox
+          characters={this.state.allCharacters}
+          handleChange={this.filterCharacters}>
+        </FilterBox>
         <CharacterSelector
-          characters={this.state.characters}
-          selectCharacter={this.setFocusCharacter}>
+          characters={this.state.filteredCharacters}
+          handleChange={this.setFocusCharacter}>
         </CharacterSelector>
         <CharacterDetail
-          character={this.state.characters[this.state.focusCharacter]}>
+          character={this.state.filteredCharacters[this.state.focusCharacter]}>
         </CharacterDetail>
       </div>
     )
