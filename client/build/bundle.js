@@ -49,7 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 	
-	var Container = __webpack_require__(169);
+	var Container = __webpack_require__(159);
 	
 	window.onload = function () {
 	  ReactDOM.render(React.createElement(Container, { url: 'http://hp-api.herokuapp.com/api/characters' }), document.getElementById('app'));
@@ -19757,8 +19757,57 @@
 	
 	var React = __webpack_require__(1);
 	
-	var CharacterSelector = __webpack_require__(160);
-	var CharacterDetail = __webpack_require__(161);
+	var CharacterBox = __webpack_require__(160);
+	var FilterBox = __webpack_require__(167);
+	
+	var Container = React.createClass({
+	  displayName: 'Container',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { allCharacters: [], filteredCharacters: [] };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var request = new XMLHttpRequest();
+	    request.open('GET', this.props.url);
+	    request.onload = function () {
+	      var HPData = JSON.parse(request.responseText);
+	      this.setState({ allCharacters: HPData, filteredCharacters: HPData });
+	      console.log("Data received from API");
+	    }.bind(this);
+	    request.send();
+	  },
+	
+	  filterCharacters: function filterCharacters(characterList) {
+	    this.setState({ filteredCharacters: characterList });
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'char-box' },
+	      React.createElement(FilterBox, {
+	        characters: this.state.allCharacters,
+	        handleChange: this.filterCharacters }),
+	      React.createElement(CharacterBox, {
+	        characters: this.state.filteredCharacters })
+	    );
+	  }
+	});
+	
+	module.exports = Container;
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var CharacterSelector = __webpack_require__(161);
+	var CharacterDetail = __webpack_require__(162);
 	
 	var CharacterBox = React.createClass({
 	  displayName: 'CharacterBox',
@@ -19803,7 +19852,7 @@
 	module.exports = CharacterBox;
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -19876,17 +19925,17 @@
 	module.exports = CharacterSelector;
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	
-	var CharacterAncestry = __webpack_require__(162);
-	var CharacterHouse = __webpack_require__(163);
-	var CharacterPatronus = __webpack_require__(164);
-	var CharacterWand = __webpack_require__(165);
+	var CharacterAncestry = __webpack_require__(163);
+	var CharacterHouse = __webpack_require__(164);
+	var CharacterPatronus = __webpack_require__(165);
+	var CharacterWand = __webpack_require__(166);
 	
 	var CharacterDetail = React.createClass({
 	  displayName: 'CharacterDetail',
@@ -19932,7 +19981,7 @@
 	module.exports = CharacterDetail;
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19963,7 +20012,7 @@
 	module.exports = CharacterAncestry;
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19994,7 +20043,7 @@
 	module.exports = CharacterHouse;
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20025,7 +20074,7 @@
 	module.exports = CharacterPatronus;
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20087,31 +20136,25 @@
 	module.exports = CharacterWand;
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	
-	var FilterChoice = __webpack_require__(167);
-	var FilterList = __webpack_require__(168);
+	var FilterChoice = __webpack_require__(168);
+	var FilterList = __webpack_require__(169);
 	
 	var FilterBox = React.createClass({
 	  displayName: 'FilterBox',
 	
 	
 	  getInitialState: function getInitialState() {
-	    return { filterValues: null };
+	    return { filterString: null, filterValues: [] };
 	  },
 	
-	  setFilterValues: function setFilterValues(filterString) {
-	    if (filterString === "none") {
-	      this.setState({ filterBy: "none", filterValues: null });
-	      // this.props.handleChange(this.props.characters);
-	      return;
-	    }
-	
+	  setFilterString: function setFilterString(filterString) {
 	    var filterValues = [];
 	    var _iteratorNormalCompletion = true;
 	    var _didIteratorError = false;
@@ -20142,25 +20185,23 @@
 	      }
 	    }
 	
-	    this.setState({ filterBy: filterString, filterValues: filterValues });
-	    // this.setCharacterChoice(0);
+	    console.log("filterValues", filterValues);
+	    this.setState({ filterString: filterString, filterValues: filterValues });
 	  },
 	
 	  setCharacterChoice: function setCharacterChoice(index) {
-	    var filterValue = this.state.filterValues[index];
-	    var characters = this.props.characters.filter(function (character) {
-	      return character[this.state.filterBy] === filterValue;
+	    var characterList = this.props.characters.filter(function (character) {
+	      return character[this.state.filterString] === this.state.filterValues[index];
 	    }.bind(this));
-	    this.props.handleChange(characters);
+	    this.props.handleChange(characterList);
 	  },
 	
 	  render: function render() {
-	    console.log("Rendering FilterBox...");
 	    return React.createElement(
 	      'div',
 	      { className: 'filter-box' },
 	      React.createElement(FilterList, {
-	        handleChange: this.setFilterValues }),
+	        handleChange: this.setFilterString }),
 	      React.createElement(FilterChoice, {
 	        values: this.state.filterValues,
 	        handleChange: this.setCharacterChoice })
@@ -20171,7 +20212,7 @@
 	module.exports = FilterBox;
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20198,7 +20239,7 @@
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    if (this.valuesChanged(nextProps.values)) {
 	      this.setState({ selectedIndex: 0 });
-	      // this.props.handleChange(0);
+	      this.props.handleChange(0);
 	    }
 	  },
 	
@@ -20249,7 +20290,7 @@
 	module.exports = FilterChoice;
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -20311,55 +20352,6 @@
 	});
 	
 	module.exports = FilterList;
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var CharacterBox = __webpack_require__(159);
-	var FilterBox = __webpack_require__(166);
-	
-	var Container = React.createClass({
-	  displayName: 'Container',
-	
-	
-	  getInitialState: function getInitialState() {
-	    return { allCharacters: [], filteredCharacters: [] };
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    var request = new XMLHttpRequest();
-	    request.open('GET', this.props.url);
-	    request.onload = function () {
-	      var HPData = JSON.parse(request.responseText);
-	      this.setState({ allCharacters: HPData, filteredCharacters: HPData });
-	      console.log("Data received from API");
-	    }.bind(this);
-	    request.send();
-	  },
-	
-	  filterCharacters: function filterCharacters(characterList) {
-	    this.setState({ filteredCharacters: characterList });
-	  },
-	
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'char-box' },
-	      React.createElement(FilterBox, {
-	        characters: this.state.allCharacters,
-	        handleChange: this.filterCharacters }),
-	      React.createElement(CharacterBox, {
-	        characters: this.state.filteredCharacters })
-	    );
-	  }
-	});
-	
-	module.exports = Container;
 
 /***/ }
 /******/ ]);
