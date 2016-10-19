@@ -23,6 +23,7 @@ var CharacterDetail = React.createClass({
         <CharacterAncestry data={character.ancestry}></CharacterAncestry>
         <CharacterWand data={character.wand}></CharacterWand>
         <CharacterPatronus data={character.patronus}></CharacterPatronus>
+        <img src={character.image} width={200} height={300} mode='fit'/>
       </div>
     )
   }

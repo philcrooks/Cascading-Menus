@@ -19757,8 +19757,8 @@
 	
 	var React = __webpack_require__(1);
 	
-	var CharacterSelector = __webpack_require__(164);
-	var CharacterDetail = __webpack_require__(166);
+	var CharacterSelector = __webpack_require__(160);
+	var CharacterDetail = __webpack_require__(161);
 	
 	var CharacterBox = React.createClass({
 	  displayName: 'CharacterBox',
@@ -19805,66 +19805,6 @@
 	
 	var React = __webpack_require__(1);
 	
-	var CharacterAncestry = function CharacterAncestry(props) {
-	  console.log(props.data);
-	  return React.createElement('p', null);
-	};
-	
-	module.exports = CharacterAncestry;
-
-/***/ },
-/* 161 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var CharacterHouse = function CharacterHouse(props) {
-	  console.log(props.data);
-	  return React.createElement('p', null);
-	};
-	
-	module.exports = CharacterHouse;
-
-/***/ },
-/* 162 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var CharacterPatronus = function CharacterPatronus(props) {
-	  console.log(props.data);
-	  return React.createElement('p', null);
-	};
-	
-	module.exports = CharacterPatronus;
-
-/***/ },
-/* 163 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
-	var CharacterWand = function CharacterWand(props) {
-	  console.log(props.data);
-	  return React.createElement('p', null);
-	};
-	
-	module.exports = CharacterWand;
-
-/***/ },
-/* 164 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	
 	var CharacterSelector = React.createClass({
 	  displayName: 'CharacterSelector',
 	
@@ -19905,18 +19845,17 @@
 	module.exports = CharacterSelector;
 
 /***/ },
-/* 165 */,
-/* 166 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
 	
-	var CharacterAncestry = __webpack_require__(160);
-	var CharacterHouse = __webpack_require__(161);
-	var CharacterPatronus = __webpack_require__(162);
-	var CharacterWand = __webpack_require__(163);
+	var CharacterAncestry = __webpack_require__(162);
+	var CharacterHouse = __webpack_require__(163);
+	var CharacterPatronus = __webpack_require__(164);
+	var CharacterWand = __webpack_require__(165);
 	
 	var CharacterDetail = React.createClass({
 	  displayName: 'CharacterDetail',
@@ -19952,12 +19891,168 @@
 	      React.createElement(CharacterHouse, { data: character.house }),
 	      React.createElement(CharacterAncestry, { data: character.ancestry }),
 	      React.createElement(CharacterWand, { data: character.wand }),
-	      React.createElement(CharacterPatronus, { data: character.patronus })
+	      React.createElement(CharacterPatronus, { data: character.patronus }),
+	      React.createElement('img', { src: character.image, width: 200, height: 300, mode: 'fit' })
 	    );
 	  }
 	});
 	
 	module.exports = CharacterDetail;
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var CharacterAncestry = function CharacterAncestry(props) {
+	  // console.log(props.data)
+	  if (!props.data) {
+	    return React.createElement(
+	      'h4',
+	      null,
+	      'This character has no known ancestry.'
+	    );
+	  }
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement(
+	      'h4',
+	      null,
+	      'Ancestry: ',
+	      props.data
+	    )
+	  );
+	};
+	
+	module.exports = CharacterAncestry;
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var CharacterHouse = function CharacterHouse(props) {
+	  // console.log(props.data)
+	  if (!props.data) {
+	    return React.createElement(
+	      'h4',
+	      null,
+	      'This character has no known house.'
+	    );
+	  }
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement(
+	      'h4',
+	      null,
+	      'House: ',
+	      props.data
+	    )
+	  );
+	};
+	
+	module.exports = CharacterHouse;
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var CharacterPatronus = function CharacterPatronus(props) {
+	  console.log(props.data);
+	  if (!props.data) {
+	    return React.createElement(
+	      'h4',
+	      null,
+	      'This character has no known patronus.'
+	    );
+	  }
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement(
+	      'h4',
+	      null,
+	      'Patronus: ',
+	      props.data
+	    )
+	  );
+	};
+	
+	module.exports = CharacterPatronus;
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var CharacterWand = function CharacterWand(props) {
+	  // console.log(props.data)
+	  if (!props.data) return React.createElement(
+	    "h4",
+	    null,
+	    "This character has no known wand."
+	  );
+	  var wood = props.data.wood;
+	  if (wood === "") wood = "unknown";
+	
+	  var core = props.data.core;
+	  if (core === "") core = "unknown";
+	
+	  var length = props.data.length;
+	  if (length === "") length = "unknown";
+	
+	  return React.createElement(
+	    "div",
+	    null,
+	    React.createElement(
+	      "h4",
+	      null,
+	      "Wand: "
+	    ),
+	    React.createElement(
+	      "ul",
+	      null,
+	      React.createElement(
+	        "li",
+	        null,
+	        " ",
+	        wood,
+	        " "
+	      ),
+	      React.createElement(
+	        "li",
+	        null,
+	        " ",
+	        core,
+	        " "
+	      ),
+	      React.createElement(
+	        "li",
+	        null,
+	        " ",
+	        length,
+	        " "
+	      )
+	    )
+	  );
+	};
+	
+	module.exports = CharacterWand;
 
 /***/ }
 /******/ ]);
