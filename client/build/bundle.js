@@ -19762,7 +19762,7 @@
 	var CharacterPatronus = __webpack_require__(162);
 	var CharacterWand = __webpack_require__(163);
 	var CharacterSelector = __webpack_require__(164);
-	var Character = __webpack_require__(165);
+	var CharacterDetail = __webpack_require__(166);
 	
 	var CharacterBox = React.createClass({
 	  displayName: 'CharacterBox',
@@ -19773,7 +19773,6 @@
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	
 	    var request = new XMLHttpRequest();
 	    request.open('GET', this.props.url);
 	    request.onload = function () {
@@ -19784,15 +19783,18 @@
 	  },
 	
 	  setFocusCharacter: function setFocusCharacter(index) {
-	    console.log(index);
+	    this.setState({ focusCharacter: index });
 	  },
 	
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
-	      React.createElement(CharacterSelector, { characters: this.state.characters, selectCharacter: this.setFocusCharacter }),
-	      React.createElement(Character, { character: this.state.characters[this.state.focusCharacter] })
+	      { className: 'char-box' },
+	      React.createElement(CharacterSelector, {
+	        characters: this.state.characters,
+	        selectCharacter: this.setFocusCharacter }),
+	      React.createElement(CharacterDetail, {
+	        character: this.state.characters[this.state.focusCharacter] })
 	    );
 	  }
 	
@@ -19875,12 +19877,50 @@
 	module.exports = CharacterSelector;
 
 /***/ },
-/* 165 */
+/* 165 */,
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	var React = __webpack_require__(1);
+	
+	var CharacterDetail = React.createClass({
+	  displayName: "CharacterDetail",
+	
+	  render: function render() {
+	    var character = this.props.character;
+	    if (!character) {
+	      return React.createElement(
+	        "div",
+	        { className: "character" },
+	        React.createElement(
+	          "p",
+	          null,
+	          "Loading..."
+	        )
+	      );
+	    }
+	    return React.createElement(
+	      "div",
+	      { className: "character" },
+	      React.createElement(
+	        "p",
+	        null,
+	        "Name: ",
+	        character.name
+	      ),
+	      React.createElement(
+	        "p",
+	        null,
+	        "Gender: ",
+	        character.gender
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = CharacterDetail;
 
 /***/ }
 /******/ ]);

@@ -5,7 +5,7 @@ var CharacterHouse = require('./CharacterHouse.jsx');
 var CharacterPatronus = require('./CharacterPatronus.jsx');
 var CharacterWand = require('./CharacterWand.jsx');
 var CharacterSelector = require('./CharacterSelector.jsx');
-var Character = require('./Character.jsx');
+var CharacterDetail = require('./CharacterDetail.jsx');
 
 var CharacterBox = React.createClass({
 
@@ -14,7 +14,6 @@ var CharacterBox = React.createClass({
   },
 
   componentDidMount: function() {
-
       var request = new XMLHttpRequest();
       request.open('GET', this.props.url);
       request.onload = function() {
@@ -25,14 +24,19 @@ var CharacterBox = React.createClass({
     },
 
     setFocusCharacter: function(index) {
-      console.log(index);
+      this.setState({focusCharacter: index});
     },
 
     render: function() {
       return (
-        <div>
-        <CharacterSelector characters={this.state.characters} selectCharacter={this.setFocusCharacter}></CharacterSelector>
-        <Character character={this.state.characters[this.state.focusCharacter]}></Character>
+        <div className="char-box">
+          <CharacterSelector
+            characters={this.state.characters}
+            selectCharacter={this.setFocusCharacter}>
+          </CharacterSelector>
+          <CharacterDetail
+            character={this.state.characters[this.state.focusCharacter]}>
+          </CharacterDetail>
         </div>
         )
     }
