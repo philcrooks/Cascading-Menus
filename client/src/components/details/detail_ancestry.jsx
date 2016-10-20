@@ -1,6 +1,6 @@
 var React = require('react');
 
-var CharacterAncestry = function(props) {
+var DetailAncestry = function(props) {
   // console.log(props.data)
   if(!props.data) 
     {return <h4>This character has no known ancestry.</h4>}
@@ -13,4 +13,4 @@ var CharacterAncestry = function(props) {
 
   
 
-module.exports = CharacterAncestry;
+module.exports = DetailAncestry;

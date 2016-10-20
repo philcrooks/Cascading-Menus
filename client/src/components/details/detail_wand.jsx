@@ -1,6 +1,6 @@
 var React = require('react');
 
-var CharacterWand = function(props) {
+var DetailWand = function(props) {
   // console.log(props.data)
   if(!props.data) return (<h4>This character has no known wand.</h4>);
   var wood = props.data.wood;
@@ -24,4 +24,4 @@ var CharacterWand = function(props) {
             )
           }
 
-module.exports = CharacterWand;
+module.exports = DetailWand;

@@ -1,6 +1,6 @@
 var React = require('react');
 
-var CharacterHouse = function(props) {
+var DetailHouse = function(props) {
   // console.log(props.data)
   if(!props.data) 
       {return <h4>This character has no known house.</h4>}
@@ -11,4 +11,4 @@ var CharacterHouse = function(props) {
           )
         }
 
-module.exports = CharacterHouse;
+module.exports = DetailHouse;

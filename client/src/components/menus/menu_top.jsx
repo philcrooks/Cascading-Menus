@@ -1,24 +1,18 @@
 var React = require('react');
 
-var FilterList = React.createClass({
-
-  getInitialState: function() {
-    return {selectedValue: "none"}; 
-  },
+var MenuTop = React.createClass({
 
   handleChange: function(event) {
     event.preventDefault();
     var newValue = event.target.value;
-    this.setState( { selectedValue: newValue } );
-    console.log("FilterList: tx selectedValue", newValue);
     this.props.handleChange( newValue );
   },
 
   render: function() {
     // console.log("Rendering FilterList...");
     return (
-      <div className="filter-list">
-        <select id="filter-list" value={this.state.selectedValue} onChange={this.handleChange}>
+      <div className="menu-top">
+        <select id="menu-top" value={this.props.menuIndex} onChange={this.handleChange}>
           <option value="none">No filter</option>
           <option value="ancestry">Ancestry</option>
           <option value="gender">Gender</option>
@@ -31,5 +25,5 @@ var FilterList = React.createClass({
 
 })
 
-module.exports = FilterList;
+module.exports = MenuTop;
 

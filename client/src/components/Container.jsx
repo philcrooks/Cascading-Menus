@@ -1,43 +1,40 @@
 var React = require('react');
 
-var CharacterBox = require('./CharacterBox.jsx');
-var FilterBox = require('./FilterBox.jsx')
+var Menus = require('./menus/menus.jsx');
+var Details = require('./details/details.jsx')
 
 var Container = React.createClass({
 
   getInitialState: function() {
-    return ({rootMenu: "", allCharacters: [], filteredCharacters: []});
+    return ({characters: [], selectedCharacter: null});
   },
 
   componentDidMount: function() {
-      var request = new XMLHttpRequest();
-      request.open('GET', this.props.url);
-      request.onload = function() {
-        var HPData = JSON.parse(request.responseText);
-        this.setState({allCharacters: HPData, filteredCharacters: HPData});
-        // console.log("Data received from API");
-      }.bind(this);
-      request.send();
-    },
+    var request = new XMLHttpRequest();
+    request.open('GET', this.props.url);
+    request.onload = function() {
+      var HPData = JSON.parse(request.responseText);
+      this.setState({characters: HPData, selectedCharacter: HPData[0]});
+      // console.log("Data received from API");
+    }.bind(this);
+    request.send();
+  },
 
-  filterCharacters: function(rootMenu, characterList) {
-    // Have a new list of filtered characters
-    // CharacterBox should reset its index
-    this.setState({rootMenu: rootMenu, filteredCharacters: characterList});
-    console.log("Container: rx rootMenu", rootMenu)
+  characterSelected: function(character) {
+    this.setState({selectedCharacter: character});
   },
 
   render: function() {
     return (
-      <div className="char-box">
-        <FilterBox
-          characters={this.state.allCharacters}
-          handleChange={this.filterCharacters}>
-        </FilterBox>
-        <CharacterBox
-          rootMenu={this.state.rootMenu}
-          characters={this.state.filteredCharacters}>
-        </CharacterBox>
+      <div className="container">
+        <Menus
+          menuValues={this.state.characters}
+          handleChange={this.characterSelected}>
+        </Menus>
+        <Details
+          character={this.state.selectedCharacter}
+          handleChange={this.characterSelected}>
+        </Details>
       </div>
     )
   }
