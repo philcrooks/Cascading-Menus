@@ -2,23 +2,22 @@ var React = require('react');
 
 var FilterChoice = React.createClass({
   getInitialState: function() {
-    return({selectedIndex: 0});
+    return({selectedIndex: 0, dropDown: []});
   },
 
-  valuesChanged: function(newValues) {
-    if (!this.props.values || !newValues || (newValues.length !== this.props.values.length)) {
+  menuChanged: function(newMenu) {
+    if (this.state.dropDown.length !== newMenu.length) {
       return true;
     }
-    for(var i = 0; i < newValues.length; i++) {
-      if(newValues[i] !== this.props.values[i]) return true;
+    for(var i = 0; i < newMenu.length; i++) {
+      if(newMenu[i] !== this.state.dropDown[i]) return true;
     }
     return false;
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    if (this.valuesChanged(nextProps.values)) {
-      this.setState({selectedIndex: 0});
-      this.props.handleChange(0);
+  componentWillReceiveProps: function(newProps) {
+    if (this.menuChanged(newProps.values)) {
+      this.setState({selectedIndex: 0, dropDown: newProps.values});
     }
   },
 
@@ -41,9 +40,10 @@ var FilterChoice = React.createClass({
       )
     }
 
-    var options = this.props.values.map(function(filterValue, index){
+    var options = this.state.dropDown.map(function(filterValue, index){
       return <option value={index} key={index}>{filterValue}</option>
     });
+
     return(
       <div className="filter-choice">
         <select id="filter-choice" value={this.state.selectedIndex} onChange={this.handleChange}>

@@ -1,8 +1,23 @@
 var React = require('react');
 
 var CharacterSelector = React.createClass({
+
   getInitialState: function() {
-    return {selectedIndex: 0};
+    return ({selectedIndex: 0, dropDown: []});
+  },
+
+  menuChanged: function(newMenu) {
+    if (newMenu.length !== this.state.dropDown.length) return true;
+    for(var i = 0; i < newMenu.length; i++) {
+      if(newMenu[i] !== this.state.dropDown[i]) return true;
+    }
+    return false;
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    if (this.menuChanged(newProps.characters)) {
+      this.setState({selectedIndex: 0, dropDown: newProps.characters});
+    }
   },
 
   handleChange: function(event) {
@@ -24,7 +39,7 @@ var CharacterSelector = React.createClass({
       )
     }
 
-    var options = this.props.characters.map(function(character, index){
+    var options = this.state.dropDown.map(function(character, index){
       return <option value={index} key={index}>{character.name}</option>; 
     });
     return(

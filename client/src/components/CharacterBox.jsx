@@ -9,18 +9,21 @@ var CharacterBox = React.createClass({
     return ({focusCharacter: 0});
   },
 
-  valuesChanged: function(newCharacters) {
-    if (!this.props.characters || !newCharacters ||
-      (newCharacters.length !== this.props.characters.length)) return true;
-    for(var i = 0; i < newCharacters.length; i++) {
-      if(newCharacters[i] !== this.props.characters[i]) return true;
-    }
-    return false;
-  },
+  // menuChanged: function(newMenu) {
+  //   if (this.state.dropDown.length !== newMenu.length) {
+  //     return true;
+  //   }
+  //   for(var i = 0; i < newMenu.length; i++) {
+  //     if(newMenu[i] !== this.state.dropDown[i]) return true;
+  //   }
+  //   return false;
+  // },
 
-  componentWillReceiveProps: function(nextProps) {
-    if (this.valuesChanged(nextProps.characters)) this.setState({focusCharacter: 0});
-  },
+  // componentWillReceiveProps: function(newProps) {
+  //   if (this.menuChanged(newProps.values)) {
+  //     this.setState({selectedIndex: 0, dropDown: newProps.values});
+  //   }
+  // },
 
   setFocusCharacter: function(index) {
     this.setState({focusCharacter: index});

@@ -21,6 +21,8 @@ var Container = React.createClass({
     },
 
   filterCharacters: function(characterList) {
+    // Have a new list of filtered characters
+    // CharacterBox should reset its index
     this.setState({filteredCharacters: characterList});
   },
 
