@@ -6,24 +6,15 @@ var CharacterDetail = require('./CharacterDetail.jsx');
 var CharacterBox = React.createClass({
 
   getInitialState: function() {
-    return ({focusCharacter: 0});
+    return ({rootMenu: "", focusCharacter: 0});
   },
 
-  // menuChanged: function(newMenu) {
-  //   if (this.state.dropDown.length !== newMenu.length) {
-  //     return true;
-  //   }
-  //   for(var i = 0; i < newMenu.length; i++) {
-  //     if(newMenu[i] !== this.state.dropDown[i]) return true;
-  //   }
-  //   return false;
-  // },
-
-  // componentWillReceiveProps: function(newProps) {
-  //   if (this.menuChanged(newProps.values)) {
-  //     this.setState({selectedIndex: 0, dropDown: newProps.values});
-  //   }
-  // },
+  componentWillReceiveProps: function(newProps) {
+    if (newProps.rootMenu !== this.state.rootMenu) {
+      console.log("CharacterBox: rx rootMenu", newProps.rootMenu)
+      this.setState({rootMenu: newProps.rootMenu, focusCharacter: 0});
+    }
+  },
 
   setFocusCharacter: function(index) {
     this.setState({focusCharacter: index});

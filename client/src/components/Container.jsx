@@ -6,7 +6,7 @@ var FilterBox = require('./FilterBox.jsx')
 var Container = React.createClass({
 
   getInitialState: function() {
-    return ({allCharacters: [], filteredCharacters: []});
+    return ({rootMenu: "", allCharacters: [], filteredCharacters: []});
   },
 
   componentDidMount: function() {
@@ -20,10 +20,11 @@ var Container = React.createClass({
       request.send();
     },
 
-  filterCharacters: function(characterList) {
+  filterCharacters: function(rootMenu, characterList) {
     // Have a new list of filtered characters
     // CharacterBox should reset its index
-    this.setState({filteredCharacters: characterList});
+    this.setState({rootMenu: rootMenu, filteredCharacters: characterList});
+    console.log("Container: rx rootMenu", rootMenu)
   },
 
   render: function() {
@@ -34,6 +35,7 @@ var Container = React.createClass({
           handleChange={this.filterCharacters}>
         </FilterBox>
         <CharacterBox
+          rootMenu={this.state.rootMenu}
           characters={this.state.filteredCharacters}>
         </CharacterBox>
       </div>

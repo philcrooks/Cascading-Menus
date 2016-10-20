@@ -20,13 +20,15 @@ var FilterBox = React.createClass({
     }
     // console.log("filterValues", filterValues)
     this.setState({filterString: filterString, filterValues: filterValues});
+    console.log("FilterBox: rx filterString ", filterString);
   },
 
   setCharacterChoice: function(index) {
     var characterList = this.props.characters.filter(function(character) {
       return (character[this.state.filterString] === this.state.filterValues[index]);
     }.bind(this))
-    this.props.handleChange(characterList);
+    console.log("FilterBox: tx filterString ", this.state.filterString);
+    this.props.handleChange(this.state.filterString, characterList);
   },
 
   render: function() {

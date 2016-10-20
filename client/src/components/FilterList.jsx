@@ -10,6 +10,7 @@ var FilterList = React.createClass({
     event.preventDefault();
     var newValue = event.target.value;
     this.setState( { selectedValue: newValue } );
+    console.log("FilterList: tx selectedValue", newValue);
     this.props.handleChange( newValue );
   },
 

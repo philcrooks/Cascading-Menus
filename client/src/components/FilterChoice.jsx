@@ -18,6 +18,8 @@ var FilterChoice = React.createClass({
   componentWillReceiveProps: function(newProps) {
     if (this.menuChanged(newProps.values)) {
       this.setState({selectedIndex: 0, dropDown: newProps.values});
+      // Don't like this line - indicates that I need to restructure the code
+      this.props.handleChange(0);
     }
   },
 
