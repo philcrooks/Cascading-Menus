@@ -14,7 +14,7 @@ var FilterList = React.createClass({
   },
 
   render: function() {
-    console.log("Rendering FilterList...");
+    // console.log("Rendering FilterList...");
     return (
       <div className="filter-list">
         <select id="filter-list" value={this.state.selectedValue} onChange={this.handleChange}>

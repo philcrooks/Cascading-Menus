@@ -30,8 +30,8 @@ var FilterChoice = React.createClass({
   },
 
   render: function() {
-    console.log("Rendering FilterChoice...");
-    if (!this.props.values || this.props.values.length === 0) {
+    // console.log("Rendering FilterChoice...");
+    if (this.props.values.length === 0) {
       return(
         <div className="filter-choice">
           <select id="filter-choice">

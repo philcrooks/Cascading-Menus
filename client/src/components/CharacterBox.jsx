@@ -27,8 +27,7 @@ var CharacterBox = React.createClass({
   },
 
   render: function() {
-    console.log("Rendering CharacterBox...");
-
+    // console.log("Rendering CharacterBox...");
     var character = (this.props.characters) ? this.props.characters[this.state.focusCharacter] : null;
     return (
       <div className="char-box">

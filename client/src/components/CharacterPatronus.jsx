@@ -1,7 +1,7 @@
 var React = require('react');
 
 var CharacterPatronus = function(props) {
-  console.log(props.data)
+  // console.log(props.data)
   if(!props.data) 
       {return <h4>This character has no known patronus.</h4>}
     return(

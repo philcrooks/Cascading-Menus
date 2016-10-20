@@ -18,7 +18,7 @@ var FilterBox = React.createClass({
         if (index < 0) filterValues.push(value);
       }
     }
-    console.log("filterValues", filterValues)
+    // console.log("filterValues", filterValues)
     this.setState({filterString: filterString, filterValues: filterValues});
   },
 

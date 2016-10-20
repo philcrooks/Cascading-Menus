@@ -15,7 +15,7 @@ var Container = React.createClass({
       request.onload = function() {
         var HPData = JSON.parse(request.responseText);
         this.setState({allCharacters: HPData, filteredCharacters: HPData});
-        console.log("Data received from API");
+        // console.log("Data received from API");
       }.bind(this);
       request.send();
     },
