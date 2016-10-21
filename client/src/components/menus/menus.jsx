@@ -37,7 +37,7 @@ var Menus = React.createClass({
 
   getInitialState: function() {
     return({
-      topChoice: "",
+      topChoice: "none",
       midChoice: 0,
       bottomChoice: 0
     })
