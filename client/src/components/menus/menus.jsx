@@ -8,21 +8,24 @@ var Menus = React.createClass({
 
   makeMidMenu: function(chosenField) {
     var midMenuValues = [];
-    for (var character of this.props.menuValues) {
-      var value = character[chosenField];
-      if (value) {
-        var index = midMenuValues.indexOf(value);
-        if (index < 0) midMenuValues.push(value);
+    if (chosenField !== "none") {
+      for (var character of this.props.menuValues) {
+        var value = character[chosenField];
+        if (value) {
+          var index = midMenuValues.indexOf(value);
+          if (index < 0) midMenuValues.push(value);
+        }
       }
     }
     return midMenuValues;
   },
 
   makeBottomMenu: function(topChoice, midChoice) {
+    if (topChoice === "none") return this.props.menuValues;
     var characterList = this.props.menuValues.filter(function(character) {
       return (character[topChoice] === midChoice);
-    }.bind(this))
-    console.log(characterList)
+    });
+    // console.log(characterList)
     return characterList;
   },
 
